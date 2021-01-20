@@ -42,7 +42,7 @@ let tasks = [
     priority: 1,
     name: "Destroy the ring",
     subTasks: [
-      { name: "Leave the county", done: true },
+      { name: "Leave the Shire", done: true },
       { name: "Seek help at Rivendel", done: true },
       { name: "Go through moria", done: true },
       { name: "Reach Gondor", done: false },
@@ -55,7 +55,7 @@ let tasks = [
     priority: 2,
     name: "Help Bilbo and the dwarfs",
     subTasks: [
-      { name: "Leave the county", done: true },
+      { name: "Leave the Shire", done: true },
       { name: "Avoid Trolls", done: true },
       { name: "Avoid Orcs", done: false },
       { name: "Avoid Goblins", done: false },
@@ -77,22 +77,25 @@ let tasks = [
 
 const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
+  let isAuth = false;
 
-  if (authHeader) {
-    const [, username, password] = `${req.headers.authorization}`.match(
-      /Bearer (.*):(.*)/
-    );
-    const user = users.find(
-      (u) => u.firstName === username && u.password === password
-    );
+  if (authHeader && authHeader.match(/Bearer .*/)) {
+    const [, token] = `${req.headers.authorization}`.match(/Bearer (.*)+/);
+    if (token.match(/\w+:\w+/i)) {
+      const [username, password] = token.split(":");
+      const user = users.find(
+        (u) => u.firstName === username && u.password === password
+      );
 
-    if (user) {
-      req.user = user;
-      next();
-    } else {
-      res.sendStatus(401);
+      if (user) {
+        req.user = user;
+        isAuth = true;
+        next();
+      }
     }
-  } else {
+  }
+
+  if (!isAuth) {
     res.sendStatus(401);
   }
 };
