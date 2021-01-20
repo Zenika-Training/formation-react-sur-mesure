@@ -12,6 +12,10 @@ function App() {
       <button onClick={() => setSass((s) => !s)} style={{ marginTop: "1rem" }}>
         Switch to {sass ? "css" : "sass"}
       </button>
+      <div>
+        To ease css class management use{" "}
+        <a href="https://css-tricks.com/bem-101/">BEM naming</a>.
+      </div>
     </div>
   );
 }
