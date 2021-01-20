@@ -1,12 +1,23 @@
-const { NavLink } = require("react-router-dom");
+import { NavLink } from "react-router-dom";
+import "./Menu.scss";
 
 function Menu() {
   return (
-    <div>
-      <NavLink exact to="/">
+    <div className="menu__wrapper">
+      <NavLink
+        className="menu__nav-link"
+        activeClassName="menu__nav-link_active"
+        exact
+        to="/"
+      >
         Liste
       </NavLink>
-      <NavLink exact to="/add">
+      <NavLink
+        className="menu__nav-link"
+        activeClassName="menu__nav-link_active"
+        exact
+        to="/add"
+      >
         Ajouter
       </NavLink>
     </div>

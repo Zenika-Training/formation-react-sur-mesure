@@ -1,3 +1,5 @@
+import "./TodoForm.scss";
+
 function TodoForm() {
   return (
     <form>
@@ -11,10 +13,12 @@ function TodoForm() {
       </div>
       <div>
         <label>Subtasks :</label>
-        <div>
-          <input id="subtasks" type="text" />
-          <button type="button">-</button>
-          <button type="button">+</button>
+        <div className="todo-form__subtasks">
+          <div>
+            <input id="subtasks" type="text" />
+            <button type="button">-</button>
+            <button type="button">+</button>
+          </div>
         </div>
       </div>
       <button type="submit">Creation ou mise à jour</button>

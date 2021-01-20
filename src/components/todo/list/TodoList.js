@@ -1,4 +1,5 @@
 import Todo from "./Todo";
+import "./TodoList.scss";
 
 const tasks = [
   {
@@ -41,7 +42,7 @@ const tasks = [
 
 function TodoList() {
   return (
-    <div>
+    <div className="todo-list__wrapper">
       <Todo {...tasks[0]} />
     </div>
   );

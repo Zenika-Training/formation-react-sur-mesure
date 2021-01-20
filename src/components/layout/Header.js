@@ -1,8 +1,10 @@
+import "./Header.scss";
+
 function Header() {
   return (
-    <div>
-      <div>Bonjour $UTILISATEUR$</div>
-      <div>Karma: $POINTS$</div>
+    <div className="header__wrapper">
+      <div className="header__greeting">Bonjour $UTILISATEUR$</div>
+      <div className="header__karma">Karma: $POINTS$</div>
     </div>
   );
 }

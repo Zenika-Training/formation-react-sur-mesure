@@ -3,6 +3,7 @@ import Layout from "./components/layout/Layout";
 import Login from "./components/login/Login";
 import TodoForm from "./components/todo/form/TodoForm";
 import TodoList from "./components/todo/list/TodoList";
+import "./App.scss";
 
 function App() {
   return (
