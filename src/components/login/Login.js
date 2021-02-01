@@ -18,7 +18,7 @@ function Login() {
       .then(({ data }) => {
         addToken(data);
         const previous = history.location.state.previous;
-        history.push(previous ? previous : "/");
+        history.push(previous && previous !== "/login" ? previous : "/");
       })
       .catch((e) => console.error(e));
   };
