@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import useAuthApi from "../../api/useAuthApi";
+import useUserInfos from "../../userInfos/useUserInfos";
 import Todo from "./Todo";
 import "./TodoList.scss";
 
 function TodoList() {
+  const { addInfos } = useUserInfos();
   const [tasks, setTasks] = useState([]);
   const api = useAuthApi();
 
@@ -34,7 +36,11 @@ function TodoList() {
             return t;
           })
         );
-      });
+      })
+      .then(() => {
+        api.get("/users/current").then(({ data }) => addInfos(data));
+      })
+      .catch((e) => console.error(e));
   };
 
   return (
