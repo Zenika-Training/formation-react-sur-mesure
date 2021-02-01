@@ -17,7 +17,8 @@ function Login() {
       .post("/login", formData)
       .then(({ data }) => {
         addToken(data);
-        history.push("/");
+        const previous = history.location.state.previous;
+        history.push(previous ? previous : "/");
       })
       .catch((e) => console.error(e));
   };
