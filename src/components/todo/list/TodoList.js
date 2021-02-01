@@ -1,49 +1,47 @@
+import { useEffect, useState } from "react";
+import useAuthApi from "../../api/useAuthApi";
 import Todo from "./Todo";
 import "./TodoList.scss";
 
-const tasks = [
-  {
-    id: 1,
-    priority: 1,
-    name: "Destroy the ring",
-    subTasks: [
-      { name: "Leave the Shire", done: true },
-      { name: "Seek help at Rivendel", done: true },
-      { name: "Go through moria", done: true },
-      { name: "Reach Gondor", done: false },
-      { name: "Climb Mount Doom", done: false },
-      { name: "Throw it into it the fire", done: false },
-    ],
-  },
-  {
-    id: 2,
-    priority: 2,
-    name: "Help Bilbo and the dwarfs",
-    subTasks: [
-      { name: "Leave the Shire", done: true },
-      { name: "Avoid Trolls", done: true },
-      { name: "Avoid Orcs", done: false },
-      { name: "Avoid Goblins", done: false },
-      { name: "Avoid Elfs", done: false },
-      { name: "Avoid Humans", done: false },
-    ],
-  },
-  {
-    id: 3,
-    priority: 3,
-    name: "Kill Voldemort",
-    subTasks: [
-      { name: "Don't get catch by ministry of magic", done: true },
-      { name: "Gather Deathly hallows", done: true },
-      { name: "Ensure we are in the right book", done: false },
-    ],
-  },
-];
-
 function TodoList() {
+  const [tasks, setTasks] = useState([]);
+  const api = useAuthApi();
+
+  useEffect(() => {
+    api
+      .get("/tasks")
+      .then(({ data }) => setTasks(data))
+      .catch((e) => console.error(e));
+  }, []);
+
+  const handleCheck = (id) => (subTaskIndex) => (done) => {
+    const updatedTask = { ...tasks.find((t) => t.id === id) };
+    const updatedSubTasks = updatedTask.subTasks.map((t, index) => {
+      if (index === subTaskIndex) {
+        return { ...t, done };
+      }
+      return t;
+    });
+
+    api
+      .put(`/tasks/${id}`, { ...updatedTask, subTasks: [...updatedSubTasks] })
+      .then(({ data }) => {
+        setTasks((ts) =>
+          ts.map((t) => {
+            if (t.id === id) {
+              return data;
+            }
+            return t;
+          })
+        );
+      });
+  };
+
   return (
     <div className="todo-list__wrapper">
-      <Todo {...tasks[0]} />
+      {tasks.map((task) => (
+        <Todo {...task} key={task.id} onSubTaskChange={handleCheck(task.id)} />
+      ))}
     </div>
   );
 }

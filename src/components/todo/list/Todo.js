@@ -1,7 +1,7 @@
 import Subtask from "./SubTask";
 import "./Todo.scss";
 
-function Todo({ id, name, priority, subTasks }) {
+function Todo({ id, name, priority, subTasks, onSubTaskChange }) {
   return (
     <div className="todo__wrapper">
       <div className="todo__header">
@@ -10,7 +10,13 @@ function Todo({ id, name, priority, subTasks }) {
         <span>{priority}</span>
       </div>
       <div className="todo__subtasks">
-        <Subtask {...subTasks[0]} />
+        {subTasks.map((subTask, index) => (
+          <Subtask
+            {...subTask}
+            key={subTask.name}
+            onChange={onSubTaskChange(index)}
+          />
+        ))}
       </div>
     </div>
   );
