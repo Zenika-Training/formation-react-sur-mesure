@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Subtask from "./SubTask";
 import "./Todo.scss";
 
@@ -17,6 +18,7 @@ function Todo({ id, name, priority, subTasks, onSubTaskChange }) {
             onChange={onSubTaskChange(index)}
           />
         ))}
+        <Link to={`/update/${id}`}>Modifier</Link>
       </div>
     </div>
   );

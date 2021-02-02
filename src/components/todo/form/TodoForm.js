@@ -1,5 +1,6 @@
 import { Field, FieldArray, Form, Formik } from "formik";
-import { useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import useAuthApi from "../../api/useAuthApi";
 import Input from "../../form/Input";
 import SubtasksInputList from "./SubtasksInputList";
@@ -8,6 +9,7 @@ import "./TodoForm.scss";
 function TodoForm() {
   const api = useAuthApi();
   const history = useHistory();
+  const { id } = useParams();
 
   const initialValues = {
     name: "",
@@ -15,12 +17,30 @@ function TodoForm() {
     subTasks: [{ name: "", done: false }],
   };
 
+  const [task, setTask] = useState(initialValues);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      api
+        .get(`/tasks/${id}`)
+        .then(({ data }) => setTask(data))
+        .then(() => setIsLoading(false))
+        .catch((err) => console.error(err));
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
   const handleSubmit = (task) => {
-    api.post("/tasks", task).then(() => history.push("/"));
+    const call = id ? api.put(`/tasks/${id}`, task) : api.post("/tasks", task);
+    call.then(() => history.push("/"));
   };
 
-  return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+  return isLoading ? (
+    <div>Chargement</div>
+  ) : (
+    <Formik initialValues={task} onSubmit={handleSubmit}>
       <Form>
         <Field
           type="text"
